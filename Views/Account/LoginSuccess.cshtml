@@ -1,0 +1,10 @@
+@{
+    ViewData["Title"] = "Login Successful";
+}
+
+<h2>Welcome, @ViewBag.UserName 🎉</h2>
+
+<p>You have successfully logged in.</p>
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-primary">Go to Home</a>
+<a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>

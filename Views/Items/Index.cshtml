@@ -1,0 +1,62 @@
+@model IEnumerable<MiniShopManager.Models.Item>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100">
+                <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height:200px; object-fit:cover;">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text mb-1">💲 Price: @item.Price</p>
+                    <p class="card-text mb-2">📦 Stock: @item.Stock</p>
+
+                    <div class="mt-auto d-flex justify-content-between">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                        <button class="btn btn-primary btn-sm add-to-cart"
+                                data-id="@item.Id"
+                                data-name="@item.Name"
+                                data-price="@item.Price"
+                                data-stock="@item.Stock"
+                                data-image="@item.ImageUrl">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll(".add-to-cart").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const item = {
+                    Id: this.dataset.id,
+                    Name: this.dataset.name,
+                    Price: parseFloat(this.dataset.price),
+                    Stock: parseInt(this.dataset.stock),
+                    ImageUrl: this.dataset.image
+                };
+
+                fetch("/Cart/Add", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(item)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        // ✅ Redirect straight to Cart page
+                        window.location.href = "/Cart";
+                    } else {
+                        alert("❌ Failed to add item to cart.");
+                    }
+                })
+                .catch(err => console.error("Error adding to cart:", err));
+            });
+        });
+    </script>
+}
