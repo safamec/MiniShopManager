@@ -1,0 +1,10 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IViewLocalizer Localizer
+<h2>@Localizer["ThankYouMessage", ViewBag.CustomerName]</h2>
+
+<p>@Localizer["OrderPlacedMessage"]</p>
+
+<p><strong>@Localizer["DeliveryAddressLabel"]:</strong> @ViewBag.Address</p>
+
+<a asp-controller="Items" asp-action="Index" class="btn btn-primary">@Localizer["ContinueShopping"]</a>

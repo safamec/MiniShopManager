@@ -1,0 +1,37 @@
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["Title"];
+}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 70vh;" dir="@((System.Threading.Thread.CurrentThread.CurrentUICulture.TextInfo.IsRightToLeft) ? "rtl" : "ltr")">
+    <div class="card shadow-lg p-4" style="width: 400px;">
+
+        <h3 class="card-title text-center mb-4">@Localizer["Title"]</h3>
+
+        <form asp-action="Login" method="post">
+            <div class="mb-3">
+                <label for="email" class="form-label">@Localizer["EmailLabel"]</label>
+                <input id="email" name="email" type="email" class="form-control" required placeholder="@Localizer["EmailPlaceholder"]" />
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">@Localizer["PasswordLabel"]</label>
+                <input id="password" name="password" type="password" class="form-control" required placeholder="@Localizer["PasswordPlaceholder"]" />
+            </div>
+
+            <div class="mb-3 text-end">
+                <a asp-action="ForgotPassword" asp-controller="Account">@Localizer["RegisterText"]</a>  <!-- If you want to use register text -->
+                <!-- Or use ForgotPassword if you have that in resource -->
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">@Localizer["LoginButton"]</button>
+        </form>
+
+       
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger mt-3 text-center">@Localizer["InvalidLogin"]</div>
+        }
+    </div>
+</div>

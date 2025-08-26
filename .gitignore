@@ -1,0 +1,34 @@
+# Visual Studio / VS Code
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build output
+bin/
+obj/
+
+# Rider / IDE
+.idea/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# ASP.NET / SQLite
+appsettings.*.json
+*.db
+*.db-journal
+*.log
+
+# Node / npm (لو فيه frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db

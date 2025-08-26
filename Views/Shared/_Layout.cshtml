@@ -1,0 +1,74 @@
+﻿@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> Localizer
+
+<!DOCTYPE html>
+<html lang="@System.Threading.Thread.CurrentThread.CurrentUICulture.Name"
+      dir="@(System.Threading.Thread.CurrentThread.CurrentUICulture.Name == "ar" ? "rtl" : "ltr")">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MiniShopManager</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MiniShopManager.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light shadow-sm" style="background-color: #4f46e5;">
+            <div class="container">
+                <a class="navbar-brand text-white fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
+                    MiniShopManager
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav @(System.Threading.Thread.CurrentThread.CurrentUICulture.Name == "ar" ? "me-auto" : "ms-auto") align-items-center">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Account" asp-action="Login">@Localizer["Login"]</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Account" asp-action="Register">@Localizer["Register"]</a>
+                        </li>
+                        <li class="nav-item">
+                            <form id="langForm" asp-action="SetLanguage" asp-controller="Account" method="post" class="d-flex align-items-center ms-3 mb-0">
+                                <select name="culture" onchange="document.getElementById('langForm').submit();" class="form-select form-select-sm">
+                                    <option value="en" selected="@(System.Threading.Thread.CurrentThread.CurrentUICulture.Name == "en" ? "selected" : null)">
+                                        @Localizer["English"]
+                                    </option>
+                                    <option value="ar" selected="@(System.Threading.Thread.CurrentThread.CurrentUICulture.Name == "ar" ? "selected" : null)">
+                                        @Localizer["Arabic"]
+                                    </option>
+                                </select>
+                                <input type="hidden" name="returnUrl" value="@($"{Context.Request.Path}{Context.Request.QueryString}")" />
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container my-5">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top text-white py-3" style="background-color: #4f46e5;">
+        <div class="container text-center">
+            &copy; 2025 - MiniShopManager -
+            <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-warning">@Localizer["Privacy"]</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
