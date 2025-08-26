@@ -1,6 +1,10 @@
-<h2>Thank you, @ViewBag.CustomerName!</h2>
-<p>Your order has been placed successfully !!</p>
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IViewLocalizer Localizer
+<h2>@Localizer["ThankYouMessage", ViewBag.CustomerName]</h2>
 
-<p><strong>Delivery Address:</strong> @ViewBag.Address</p>
+<p>@Localizer["OrderPlacedMessage"]</p>
 
-<a asp-controller="Items" asp-action="Index" class="btn btn-primary">Continue Shopping</a>
+<p><strong>@Localizer["DeliveryAddressLabel"]:</strong> @ViewBag.Address</p>
+
+<a asp-controller="Items" asp-action="Index" class="btn btn-primary">@Localizer["ContinueShopping"]</a>

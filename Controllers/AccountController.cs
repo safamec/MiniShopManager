@@ -1,8 +1,9 @@
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using MiniShopManager.Data;
 using MiniShopManager.Models;
 using System.Linq;
-using Microsoft.AspNetCore.Http; // for HttpContext.Session
+using Microsoft.AspNetCore.Http;
 
 namespace MiniShopManager.Controllers
 {
@@ -53,7 +54,7 @@ namespace MiniShopManager.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(string email, string password)
         {
-            // 1) Hard-coded admin login (not stored in DB)
+            // 1) Hard-coded admin login
             if (email == "admin@gmail.com" && password == "123456")
             {
                 HttpContext.Session.SetString("UserName", "Admin");
@@ -61,7 +62,7 @@ namespace MiniShopManager.Controllers
                 return RedirectToAction("Dashboard", "Admin");
             }
 
-            // 2) Normal user login from DB
+            // 2) Normal user login
             var user = _context.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
             if (user != null)
             {
@@ -70,12 +71,11 @@ namespace MiniShopManager.Controllers
                 return RedirectToAction("LoginSuccess");
             }
 
-            // 3) Invalid login
             ModelState.AddModelError("", "Invalid email or password");
             return View();
         }
 
-        // Normal user login success page
+        // GET: LoginSuccess
         public IActionResult LoginSuccess()
         {
             var userName = HttpContext.Session.GetString("UserName");
@@ -88,11 +88,81 @@ namespace MiniShopManager.Controllers
             return View();
         }
 
+        // GET: Forgot Password
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        // POST: Forgot Password
+        [HttpPost]
+        public IActionResult ForgotPassword(string email)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                ViewBag.Error = "Email not found.";
+                return View();
+            }
+
+            // Directly go to reset form (no token)
+            return RedirectToAction("ResetPassword", new { email = user.Email });
+        }
+
+        // GET: Reset Password
+        public IActionResult ResetPassword(string email)
+        {
+            ViewBag.Email = email;
+            return View();
+        }
+
+        // POST: Reset Password
+        [HttpPost]
+        public IActionResult ResetPassword(string email, string newPassword, string confirmPassword)
+        {
+            if (newPassword != confirmPassword)
+            {
+                ModelState.AddModelError("", "Passwords do not match.");
+                ViewBag.Email = email;
+                return View();
+            }
+
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.Password = newPassword; // Remember: hash passwords in production!
+            _context.SaveChanges();
+
+            TempData["Message"] = "Password reset successful!";
+            return RedirectToAction("Login");
+        }
+
         // Logout
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
+        }
+
+        // POST: Language switcher action
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = System.DateTimeOffset.UtcNow.AddYears(1) }
+            );
+
+            if (string.IsNullOrEmpty(returnUrl) || !Url.IsLocalUrl(returnUrl))
+            {
+                returnUrl = Url.Action("Login", "Account");
+            }
+
+            return LocalRedirect(returnUrl);
         }
     }
 }

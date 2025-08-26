@@ -1,5 +1,9 @@
 @model IEnumerable<MiniShopManager.Models.Item>
 
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IViewLocalizer Localizer
+
 <div class="row">
     @foreach (var item in Model)
     {
@@ -8,8 +12,8 @@
                 <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height:200px; object-fit:cover;">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">@item.Name</h5>
-                    <p class="card-text mb-1">💲 Price: @item.Price</p>
-                    <p class="card-text mb-2">📦 Stock: @item.Stock</p>
+                    <p class="card-text mb-1">@Localizer["PriceLabel"] @item.Price</p>
+                    <p class="card-text mb-2">@Localizer["StockLabel"] @item.Stock</p>
 
                     <form asp-controller="Cart" asp-action="Add" method="post">
                         <input type="hidden" name="Id" value="@item.Id" />
@@ -18,7 +22,7 @@
                         <input type="hidden" name="Stock" value="1" />
                         <input type="hidden" name="ImageUrl" value="@item.ImageUrl" />
                         <button type="submit" class="btn btn-primary mt-auto w-100">
-                            Add to Cart
+                            @Localizer["AddToCart"]
                         </button>
                     </form>
                 </div>

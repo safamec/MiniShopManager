@@ -1,39 +1,38 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IViewLocalizer Localizer
 @model MiniShopManager.Models.Item
-@{
-    ViewData["Title"] = "Create Item";
-}
 
-<h2>Create New Item</h2>
+@{
+    ViewData["Title"] = Localizer["CreateItemTitle"];
+}
+<h2>@Localizer["CreateNewItem"]</h2>
 
 <form asp-action="Create" method="post">
     <div class="form-group">
-        <label>Name</label>
+        <label>@Localizer["Name"]</label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label>Price</label>
+        <label>@Localizer["Price"]</label>
         <input asp-for="Price" class="form-control" />
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label>Stock</label>
+        <label>@Localizer["Stock"]</label>
         <input asp-for="Stock" class="form-control" />
         <span asp-validation-for="Stock" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label>Image URL</label>
+        <label>@Localizer["ImageUrl"]</label>
         <input asp-for="ImageUrl" class="form-control" />
         <span asp-validation-for="ImageUrl" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-success mt-2">Create</button>
-    <a asp-action="Dashboard" class="btn btn-secondary mt-2">Cancel</a>
+    <button type="submit" class="btn btn-success mt-2">@Localizer["Create"]</button>
+    <a asp-action="Dashboard" class="btn btn-secondary mt-2">@Localizer["Cancel"]</a>
 </form>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

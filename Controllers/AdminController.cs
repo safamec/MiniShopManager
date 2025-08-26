@@ -1,7 +1,8 @@
- using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MiniShopManager.Data;
 using MiniShopManager.Models;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace MiniShopManager.Controllers
 {
@@ -14,9 +15,19 @@ namespace MiniShopManager.Controllers
             _context = context;
         }
 
+        // 🔒 Helper method to check admin status
+        private bool IsAdmin()
+        {
+            var isAdmin = HttpContext.Session.GetString("IsAdmin");
+            return isAdmin == "true";
+        }
+
         // ✅ Dashboard: List all items
         public IActionResult Dashboard()
         {
+            if (!IsAdmin())
+                return RedirectToAction("AccessDenied", "Account");
+
             var items = _context.Items.ToList();
             return View(items);
         }
@@ -24,6 +35,9 @@ namespace MiniShopManager.Controllers
         // ✅ Create item (GET)
         public IActionResult Create()
         {
+            if (!IsAdmin())
+                return RedirectToAction("AccessDenied", "Account");
+
             return View();
         }
 
@@ -32,6 +46,9 @@ namespace MiniShopManager.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Item item)
         {
+            if (!IsAdmin())
+                return RedirectToAction("AccessDenied", "Account");
+
             if (ModelState.IsValid)
             {
                 _context.Items.Add(item);
@@ -44,6 +61,9 @@ namespace MiniShopManager.Controllers
         // ✅ Edit item (GET)
         public IActionResult Edit(int id)
         {
+            if (!IsAdmin())
+                return RedirectToAction("AccessDenied", "Account");
+
             var item = _context.Items.FirstOrDefault(i => i.Id == id);
             if (item == null) return NotFound();
             return View(item);
@@ -54,6 +74,9 @@ namespace MiniShopManager.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Item item)
         {
+            if (!IsAdmin())
+                return RedirectToAction("AccessDenied", "Account");
+
             if (ModelState.IsValid)
             {
                 _context.Items.Update(item);
@@ -66,6 +89,9 @@ namespace MiniShopManager.Controllers
         // ✅ Delete item
         public IActionResult Delete(int id)
         {
+            if (!IsAdmin())
+                return RedirectToAction("AccessDenied", "Account");
+
             var item = _context.Items.FirstOrDefault(i => i.Id == id);
             if (item != null)
             {

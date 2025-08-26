@@ -1,10 +1,18 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
+@inject IViewLocalizer Localizer
+
 @{
-    ViewData["Title"] = "Login Successful";
+    ViewData["Title"] = Localizer["LoginSuccess_Title"];
 }
 
-<h2>Welcome, @ViewBag.UserName 🎉</h2>
+<h2>@Localizer["Welcome_Message", ViewBag.UserName]</h2>
 
-<p>You have successfully logged in.</p>
+<p>@Localizer["LoginSuccess_Description"]</p>
 
-<a asp-controller="Items" asp-action="Index" class="btn btn-primary">Go to Shop</a>
-<a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
+<a asp-controller="Items" asp-action="Index" class="btn btn-primary">
+    @Localizer["GoToShop_Button"]
+</a>
+<a asp-controller="Account" asp-action="Logout" class="btn btn-danger">
+    @Localizer["Logout_Button"]
+</a>
