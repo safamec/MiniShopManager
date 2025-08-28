@@ -117,12 +117,24 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Login " xml:space="preserve">
+  <data name="Login" xml:space="preserve">
     <value>تسجيل الدخول</value>
     <comment/>
   </data>
   <data name="Register" xml:space="preserve">
     <value>تسجيل</value>
+    <comment/>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>الإنجليزية</value>
+    <comment/>
+  </data>
+  <data name="Arabic" xml:space="preserve">
+    <value>العربية</value>
+    <comment/>
+  </data>
+  <data name="Privacy" xml:space="preserve">
+    <value>الخصوصية</value>
     <comment/>
   </data>
 </root>

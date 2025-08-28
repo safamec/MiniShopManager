@@ -1,11 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
-using MiniShopManager.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add distributed memory cache and session services
+// Add localization services and configure MVC with localization
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
+// Add session services
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -14,11 +20,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Add MVC controllers with views
-builder.Services.AddControllersWithViews();
-
-// Add your SQLite DB context
-builder.Services.AddDbContext<ShopContext>(options =>
+// Register your DbContext with SQLite
+builder.Services.AddDbContext<MiniShopManager.Data.ShopContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configure supported cultures and localization options
@@ -39,23 +42,21 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
+// Middleware order is important
 
-app.UseHttpsRedirection();
+// Use localization middleware first
+app.UseRequestLocalization(app.Services.GetRequiredService<Microsoft.Extensions.Options.IOptions<RequestLocalizationOptions>>().Value);
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseSession();
 
-app.UseAuthorization();
+app.UseAuthorization(); // Optional if you use auth
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}"); // or Home/Index, choose whichever is appropriate
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();

@@ -1,4 +1,5 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> Localizer
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Env
 
 <!DOCTYPE html>
 <html lang="@System.Threading.Thread.CurrentThread.CurrentUICulture.Name"
@@ -12,6 +13,21 @@
     <link rel="stylesheet" href="~/MiniShopManager.styles.css" asp-append-version="true" />
 </head>
 <body>
+    @{
+        var envName = Env.EnvironmentName;
+        var envColor = envName switch
+        {
+            "Development" => "#198754", // green
+            "Staging" => "#fd7e14",     // orange
+            "Production" => "#dc3545",  // red
+            _ => "#6c757d"              // gray
+        };
+    }
+
+    <div style="background-color:@envColor; color: white; padding: 6px; text-align: center; font-weight: bold;">
+        Environment: @envName
+    </div>
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-light shadow-sm" style="background-color: #4f46e5;">
             <div class="container">

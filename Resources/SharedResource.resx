@@ -125,4 +125,16 @@
     <value>Register</value>
     <comment/>
   </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+    <comment/>
+  </data>
+  <data name="Arabic" xml:space="preserve">
+    <value>Arabic</value>
+    <comment/>
+  </data>
+  <data name="Privacy" xml:space="preserve">
+    <value>Privacy</value>
+    <comment/>
+  </data>
 </root>
